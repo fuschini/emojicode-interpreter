@@ -1,0 +1,16 @@
+service: emojicode-back
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  timeout: 29
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+  - serverless-offline
