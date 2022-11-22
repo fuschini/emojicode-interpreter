@@ -11,6 +11,18 @@ functions:
     handler: handler.handler
     events:
       - httpApi: '*'
+    role: arn:aws:iam::261810331311:role/general-lambda-role
+
+    vpc:
+      securityGroupIds:
+        - sg-5587361e
+      subnetIds:
+        - subnet-fc04daa0
+        - subnet-08117c42
+        - subnet-7ab92375
+        - subnet-db3ce5bc
+        - subnet-c2578fec
+        - subnet-5c59b662
 
 plugins:
   - serverless-offline
