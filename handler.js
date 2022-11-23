@@ -4,10 +4,12 @@ const express = require("express");
 const SSH = require('simple-ssh');
 const { v4: uuidv4 } = require('uuid');
 const bodyParser = require('body-parser');
+var cors = require('cors');
 const fs = require("fs");
 const app = express();
 
-app.use(bodyParser.json({ strict: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
 function getSessionId() {
   return uuidv4();
@@ -16,7 +18,7 @@ function getSessionId() {
 app.post("/test", async (req, res, next) => {
   console.log(req.body);
   return res.status(200).json({
-    message: req.body,
+    message: req.body
   });
 })
 
