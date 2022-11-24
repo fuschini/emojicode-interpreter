@@ -4,7 +4,6 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs16.x
-  timeout: 29
 
 functions:
   api:
@@ -12,6 +11,11 @@ functions:
     events:
       - httpApi: '*'
     role: arn:aws:iam::261810331311:role/general-lambda-role
+    timeout: 29
+    memorySize: 128
+
+    environment:
+      EC2_PEM: ${file(emojicode_ec2.pem)}
 
     vpc:
       securityGroupIds:
