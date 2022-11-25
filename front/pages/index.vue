@@ -1,0 +1,87 @@
+<template>
+  <div>
+    <div id="header">
+      <h1>Emojicode interpreter</h1>
+    </div>
+    <div id="main-section">
+      <div id="input">
+        <h2>Input</h2>
+        <a-textarea v-model="value" placeholder="Enter emojicode here..." :rows="10" class="code" />
+      </div>
+      <div id="output">
+        <h2>Output</h2>
+        <div id="outputContainer" class="code">{{output}}</div>
+      </div>
+    </div>
+    <div id="commands-section">
+      <a-button type="primary" @click="test">
+        <!-- <template #icon><SearchOutlined /></template> -->
+        Run code
+      </a-button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'IndexPage',
+
+  data() {
+    return {
+      value: `🏁 🍇\n  😀 🔤Hello, World!🔤❗️\n🍉`,
+      output: 'Run your program to generate an output'
+    }
+  },
+  methods: {
+    async test() {
+      // Local
+      // const output = await this.$axios.$post('http://localhost:3000/ec2', this.buildRequestBody())
+      // PROD
+      const output = await this.$axios.$post('https://001pb4wxv8.execute-api.us-east-1.amazonaws.com/ec2', this.buildRequestBody())
+      this.output = output.message.logs
+      console.log(output);
+    },
+    buildRequestBody() {
+      return {
+        code: this.value
+      }
+    }
+  }
+}
+</script>
+
+<style>
+#main-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+#main-section > * {
+  width: 49%;
+}
+
+textarea {
+  /* font-size: 1.5em;
+  color: black; */
+}
+
+#outputContainer {
+  white-space: pre-line;
+}
+.code {
+  font-size: 1.3em;
+  color: black;
+  font-family: monospace;
+}
+
+.code > * {
+  font-size: 1.1em;
+  color: black;
+  font-family: monospace;
+}
+
+#commands-section {
+  margin-top: 16px;
+}
+
+</style>
