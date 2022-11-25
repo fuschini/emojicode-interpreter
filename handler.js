@@ -50,7 +50,10 @@ app.post("/ec2", async (req, res, next) => {
 
     let output = {
       logs: '',
-      output: ''
+      output: '',
+      compileError: '',
+      executionError: '',
+      cleaningLogs: ''
     };
 
     ssh.exec(`echo "${input}" > ./input/${sessionId}.emojic`, {
@@ -65,7 +68,9 @@ app.post("/ec2", async (req, res, next) => {
         output.logs += stdout;
       },
       err: function(stderr) {
+        stderr = stderr.replace('emojicodec: /lib64/libtinfo.so.5: no version information available (required by emojicodec)\n', '')
         output.logs += stderr;
+        output.compileError += stderr;
       }
     }).exec(`./input/${sessionId}`, {
       out: function(stdout) {
@@ -73,17 +78,20 @@ app.post("/ec2", async (req, res, next) => {
         output.output += stdout;
       },
       err: function(stderr) {
-        output.logs += stderr;
+        output.logs += stderr.replace(/bash: \.\/input\/[0-9a-zA-z\-]+: No such file or directory/g, '');
+        output.executionError += stderr;
       }
     }).exec(`rm input/${sessionId} && rm input/${sessionId}.o`, {
       exit: function() {
+        console.log('About to resolve with output:');
+        console.log(output);
         resolve(output);
       },
       out: function(stdout) {
-        output.logs += stdout;
+        output.cleaningLogs += stdout;
       },
       err: function(stderr) {
-        output.logs += stderr;
+        output.cleaningLogs += stderr;
       }
     }).start({
       success: function() {
@@ -92,6 +100,8 @@ app.post("/ec2", async (req, res, next) => {
       fail: function(e) {
         console.log("failed connection, boo");
         console.log(e);
+        output.logs += `Connection failed\n${e.message}`
+        resolve(output);
       }
     });
 
