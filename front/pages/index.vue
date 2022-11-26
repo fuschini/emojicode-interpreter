@@ -6,7 +6,7 @@
     <div id="main-section">
       <div id="input">
         <h2>Input</h2>
-        <a-textarea v-model="value" placeholder="Enter emojicode here..." :rows="10" class="code" />
+        <a-textarea v-model="value" placeholder="Enter emojicode here..." :rows="10" class="code" :autosize="{ minRows: 4, maxRows: 20 }" />
       </div>
       <div id="output">
         <h2>Output</h2>
