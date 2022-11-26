@@ -14,8 +14,7 @@
       </div>
     </div>
     <div id="commands-section">
-      <a-button type="primary" @click="runCode">
-        <!-- <template #icon><SearchOutlined /></template> -->
+      <a-button type="primary" @click="runCode" :loading="loading">
         Run code
       </a-button>
     </div>
@@ -39,17 +38,24 @@ export default {
   data() {
     return {
       input: '',
-      output: 'Run your program to generate an output'
+      output: 'Run your program to generate an output',
+      loading: false
     }
   },
   methods: {
     async runCode() {
-      // Local
-      // const output = await this.$axios.$post('http://localhost:3000/ec2', this.buildRequestBody())
-      // PROD
-      const output = await this.$axios.$post('https://001pb4wxv8.execute-api.us-east-1.amazonaws.com/ec2', this.buildRequestBody())
-      this.output = output.message.logs
-      console.log(output);
+      this.loading = true
+      try {
+        // Local
+        // const output = await this.$axios.$post('http://localhost:3000/ec2', this.buildRequestBody())
+        // PROD
+        const output = await this.$axios.$post('https://001pb4wxv8.execute-api.us-east-1.amazonaws.com/ec2', this.buildRequestBody())
+        this.output = output.message.logs
+      } catch (e) {
+        this.output = 'Unknown error at request. Check logs'
+        console.log(e);
+      }
+      this.loading = false
     },
     buildRequestBody() {
       return {
