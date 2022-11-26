@@ -14,7 +14,7 @@
       </div>
     </div>
     <div id="commands-section">
-      <a-button type="primary" @click="test">
+      <a-button type="primary" @click="runCode">
         <!-- <template #icon><SearchOutlined /></template> -->
         Run code
       </a-button>
@@ -33,7 +33,7 @@ export default {
     }
   },
   methods: {
-    async test() {
+    async runCode() {
       // Local
       // const output = await this.$axios.$post('http://localhost:3000/ec2', this.buildRequestBody())
       // PROD
