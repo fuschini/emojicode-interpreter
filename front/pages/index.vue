@@ -6,7 +6,7 @@
     <div id="main-section">
       <div id="input">
         <h2>Input</h2>
-        <a-textarea v-model="value" placeholder="Enter emojicode here..." :rows="10" class="code" :autoSize="{ minRows: 4, maxRows: 20 }" @change="saveCode" />
+        <a-textarea v-model="input" placeholder="Enter emojicode here..." :rows="10" class="code" :autoSize="{ minRows: 4, maxRows: 20 }" @change="saveCode" />
       </div>
       <div id="output">
         <h2>Output</h2>
@@ -26,9 +26,19 @@
 export default {
   name: 'IndexPage',
 
+  mounted() {
+    console.log();
+
+    if (!this.getSavedInput()) {
+      this.input = `🏁 🍇\n  😀 🔤Hello, World!🔤❗️\n🍉`
+    } else {
+      this.input = this.getSavedInput()
+    }
+  },
+
   data() {
     return {
-      value: `🏁 🍇\n  😀 🔤Hello, World!🔤❗️\n🍉`,
+      input: '',
       output: 'Run your program to generate an output'
     }
   },
@@ -43,8 +53,14 @@ export default {
     },
     buildRequestBody() {
       return {
-        code: this.value
+        code: this.input
       }
+    },
+    saveCode() {
+      localStorage.setItem('input', this.input);
+    },
+    getSavedInput() {
+      return localStorage.getItem('input');
     }
   }
 }
