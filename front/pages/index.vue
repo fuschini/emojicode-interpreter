@@ -82,11 +82,6 @@ export default {
   width: 49%;
 }
 
-textarea {
-  /* font-size: 1.5em;
-  color: black; */
-}
-
 #outputContainer {
   white-space: pre-line;
 }
