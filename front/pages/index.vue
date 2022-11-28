@@ -46,9 +46,7 @@ export default {
     async runCode() {
       this.loading = true
       try {
-        // PROD
-        // const output = await this.$axios.$post('https://001pb4wxv8.execute-api.us-east-1.amazonaws.com/ec2', this.buildRequestBody())
-        const output = await this.$axios.$post(`${process.env.NUXT_ENV_API_BASE_URL}/ec2`, this.buildRequestBody())
+        const output = await this.$axios.$post(`${process.env.NUXT_ENV_API_BASE_URL}`, this.buildRequestBody())
         this.output = output.message.logs
       } catch (e) {
         this.output = 'Unknown error at request. Check logs'
