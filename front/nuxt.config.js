@@ -10,6 +10,10 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
+  router: {
+    base: '/emojicode/'
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Emojicode interpreter',
@@ -23,7 +27,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: '/grapes_1f347.png' }
+      { rel: 'icon', type: 'image/png', href: './grapes_1f347.png' }
     ]
   },
 

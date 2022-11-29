@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "local": "nuxt",
+    "dev": "nuxt --dotenv ./.env.dev",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "deploy-dev": "nuxt generate && aws s3 sync ./dist s3://emojicode-front --delete"
+    "deploy-dev": "nuxt generate --force-build --dotenv ./.env.dev && aws s3 sync ./dist s3://h-computery-front/emojicode --delete",
+    "deploy-prod": "nuxt generate --force-build --dotenv ./.env.prod && aws s3 sync ./dist s3://prod-computery-front/emojicode --delete"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/dotenv": "^1.4.1",
     "ant-design-vue": "^1.7.8",
     "core-js": "^3.25.3",
     "nuxt": "^2.15.8",

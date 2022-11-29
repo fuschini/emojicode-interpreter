@@ -22,7 +22,7 @@ app.post("/test", async (req, res, next) => {
   });
 })
 
-app.post("/ec2", async (req, res, next) => {
+app.post("/emojicode", async (req, res, next) => {
   
   if (!req.body.code) {
     return res.status(400).json({
