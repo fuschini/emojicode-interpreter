@@ -4,12 +4,17 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs16.x
+  stage: ${opt:stage, "dev"}
+  httpApi:
+    id: ${file(envvars.json):${self:provider.stage}.apiGatewayId}
 
 functions:
   api:
     handler: handler.handler
     events:
-      - httpApi: '*'
+      - httpApi:
+          path: /emojicode
+          method: POST
     role: arn:aws:iam::261810331311:role/general-lambda-role
     timeout: 29
     memorySize: 128
