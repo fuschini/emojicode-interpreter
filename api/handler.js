@@ -53,7 +53,8 @@ app.post("/emojicode", async (req, res, next) => {
       output: '',
       compileError: '',
       executionError: '',
-      cleaningLogs: ''
+      cleaningLogs: '',
+      timeoutError: false
     };
 
     ssh.exec(`echo "${input}" > ./input/${sessionId}.emojic`, {
@@ -72,7 +73,7 @@ app.post("/emojicode", async (req, res, next) => {
         output.logs += stderr;
         output.compileError += stderr;
       }
-    }).exec(`./input/${sessionId}`, {
+    }).exec(`timeout 15 ./input/${sessionId}`, {
       out: function(stdout) {
         output.logs += stdout;
         output.output += stdout;
@@ -80,8 +81,15 @@ app.post("/emojicode", async (req, res, next) => {
       err: function(stderr) {
         output.logs += stderr.replace(/bash: \.\/input\/[0-9a-zA-z\-]+: No such file or directory/g, '');
         output.executionError += stderr;
+      },
+      exit: function(code) {
+        console.log(`execution exit code: ${code}`);
+        if (code == 124) {
+          output.logs += 'Operation timeout after 15s\n';
+          output.timeoutError = true;
+        }
       }
-    }).exec(`rm input/${sessionId} && rm input/${sessionId}.o`, {
+    }).exec(`rm input/${sessionId} && rm input/${sessionId}.o && rm input/${sessionId}.emojic`, {
       exit: function() {
         console.log('About to resolve with output:');
         console.log(output);
