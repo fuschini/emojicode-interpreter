@@ -1,5 +1,5 @@
 const serverless = require("serverless-http");
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 const express = require("express");
 const SSH = require('simple-ssh');
 const { v4: uuidv4 } = require('uuid');
@@ -15,10 +15,24 @@ function getSessionId() {
   return uuidv4();
 }
 
-app.post("/test", async (req, res, next) => {
+app.post("/test", (req, res, next) => {
   console.log(req.body);
+
+  let response
+
+  try {
+    response = execSync(req.body.cmd, { encoding: 'ascii' });
+    console.log('success');
+  } catch (error) {
+    console.log('fail');
+    console.log(error)
+    response = error
+  }
+
+  console.log(response);
+
   return res.status(200).json({
-    message: req.body
+    message: response
   });
 })
 

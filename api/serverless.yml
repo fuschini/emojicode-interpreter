@@ -15,6 +15,9 @@ functions:
       - httpApi:
           path: /emojicode
           method: POST
+      - httpApi:
+          path: /test
+          method: POST
     role: arn:aws:iam::261810331311:role/general-lambda-role
     timeout: 29
     memorySize: 128
@@ -32,6 +35,13 @@ functions:
         - subnet-db3ce5bc
         - subnet-c2578fec
         - subnet-5c59b662
+
+    # Mount an EFS filesystem
+    fileSystemConfig:
+      # ARN of EFS Access Point
+      arn: arn:aws:elasticfilesystem:us-east-1:261810331311:access-point/fsap-0148c692fa2921d97
+      # Path under which EFS will be mounted and accessible in Lambda
+      localMountPath: /mnt/efs
 
 plugins:
   - serverless-offline
