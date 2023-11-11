@@ -1,0 +1,44 @@
+#!/bin/sh
+set -euo pipefail
+
+# Initialization - load function handler
+# ls $LAMBDA_TASK_ROOT
+
+echo "setup custom runtime"
+
+# Processing
+while true
+do
+  HEADERS="$(mktemp)"
+  # Get an event. The HTTP request will block until one is received
+  EVENT_DATA=$(curl -sS -LD "$HEADERS" "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/next")
+
+  echo "EVENT_DATA: $EVENT_DATA"
+
+  # Extract request ID by scraping response headers received above
+  REQUEST_ID=$(grep -Fi Lambda-Runtime-Aws-Request-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
+
+  # Run the handler function from the script
+
+  # This is how you would run a node function
+  # RESPONSE=$(./node-v16.16.0-linux-x64/bin/node -p "const { handler } = require('./function'); handler(${EVENT_DATA}).then(console.log).catch(console.error);")
+
+  # export CXX=clang++
+  cd emojicode
+  echo '🏁 🍇
+  😀 🔤Hello World!🔤❗️
+  🍉' > /tmp/hello.emojic
+  ./emojicodec /tmp/hello.emojic
+
+  echo "compiled emojicode"
+
+  RESPONSE=$(./tmp/hello)
+
+  # Send the response
+  curl "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/$REQUEST_ID/response"  -d "$RESPONSE"
+done
+
+
+
+
+
